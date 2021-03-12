@@ -4,6 +4,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   url: process.env.DATABASE_URL,
   entities: [__dirname + process.env.ENTITIES],
-  ssl: true,
+  ssl: { rejectUnauthorized: false },
   synchronize: true,
 };
