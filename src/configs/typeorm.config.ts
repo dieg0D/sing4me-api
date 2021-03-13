@@ -6,7 +6,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   entities: [__dirname + process.env.ENTITIES],
   synchronize: true,
   logging: true,
-  extra: {
-    ssl: true,
-  },
+  ssl: { rejectUnauthorized: false },
 };
