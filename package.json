@@ -47,7 +47,9 @@
     "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.31",
     "uuidv4": "^6.2.6",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "ytdl-core": "^4.5.0",
+    "ytsr": "^3.3.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.6",
