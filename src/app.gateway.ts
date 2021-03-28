@@ -14,6 +14,8 @@ const users: any = {};
 
 const socketToRoom: any = {};
 
+const currentSinger: any = {};
+
 @WebSocketGateway()
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -39,6 +41,10 @@ export class AppGateway
 
     client.emit('all users', usersInThisRoom);
     updateLength(roomID, users[roomID]?.length);
+
+    if (currentSinger[roomID]) {
+      client.emit('current singer', currentSinger[roomID]);
+    }
   }
 
   @SubscribeMessage('sending signal')
@@ -57,6 +63,18 @@ export class AppGateway
     });
   }
 
+  @SubscribeMessage('singing')
+  singing(client: Socket, roomID: string): void {
+    currentSinger[roomID] = client.id;
+    client.broadcast.emit('current singer', client.id);
+  }
+
+  @SubscribeMessage('remove singer')
+  removeSinger(client: Socket, roomID: string): void {
+    currentSinger[roomID] = '';
+    client.broadcast.emit('current singer', '');
+  }
+
   afterInit(server: Server) {
     this.logger.log('Init');
   }
@@ -72,6 +90,10 @@ export class AppGateway
 
     client.broadcast.emit('remove user', client.id);
     updateLength(roomID, users[roomID]?.length);
+
+    if (users[roomID]?.length === 0) {
+      currentSinger[roomID] = '';
+    }
   }
 
   handleConnection(client: Socket, ...args: any[]) {
